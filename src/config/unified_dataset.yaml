@@ -1,0 +1,112 @@
+# Unified Dataset Registry Configuration
+# This file defines the configuration for mixing multiple datasets
+
+# Dataset mixing strategy
+dataset:
+  mix_strategy: "temperature"  # temperature, uniform, weighted
+  temperature_tau: 1.0  # Temperature mixing parameter (higher = more uniform)
+  unit_conversion: true  # Convert all units to eV
+  validation_split: 0.1
+  test_split: 0.1
+  random_seed: 42
+
+# Individual dataset configurations
+datasets:
+  jarvis_dft_v1:
+    domain_id: "jarvis_dft"
+    name: "JARVIS-DFT-v1"
+    path: "data/jarvis_dft/data/jarvis_dft/jdft_3d-4-26-2020.json"
+    energy_unit: "eV"
+    force_unit: "eV/Å"
+    stress_unit: "eV/Å³"
+    temperature_range: [0, 1000]
+    atomic_species: [1, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]
+    max_samples: null  # Use all available samples
+    weight: 1.0
+    enabled: true
+
+  jarvis_dft_v2:
+    domain_id: "jarvis_dft"
+    name: "JARVIS-DFT-v2"
+    path: "data/jarvis_dft/data/jarvis_dft/jdft_3d-6-6-2019.json"
+    energy_unit: "eV"
+    force_unit: "eV/Å"
+    stress_unit: "eV/Å³"
+    temperature_range: [0, 1000]
+    atomic_species: [1, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]
+    max_samples: null  # Use all available samples
+    weight: 0.8
+    enabled: true
+
+  jarvis_elastic:
+    domain_id: "jarvis_elastic"
+    name: "JARVIS-Elastic"
+    path: "data/jarvis_elastic/data/jarvis_elastic/elastic_tensor.json"
+    energy_unit: "eV"
+    force_unit: "eV/Å"
+    stress_unit: "eV/Å³"
+    temperature_range: [0, 0]  # Zero temperature for elastic properties
+    atomic_species: [1, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]
+    max_samples: null  # Use all available samples
+    weight: 0.3
+    enabled: false  # Disabled - file doesn't exist
+
+  oc20_s2ef:
+    domain_id: "oc20_s2ef"
+    name: "OC20-S2EF"
+    path: "data/oc20/s2ef_train_200K/s2ef_train_200K"
+    energy_unit: "eV"
+    force_unit: "eV/Å"
+    stress_unit: "eV/Å³"
+    temperature_range: [300, 2000]
+    atomic_species: [1, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]
+    max_samples: 1000  # Limit for testing
+    weight: 2.0
+    enabled: true
+
+  oc22_s2ef:
+    domain_id: "oc22_s2ef"
+    name: "OC22-S2EF"
+    path: "data/oc22/s2ef_val_id/s2ef_val_id"
+    energy_unit: "eV"
+    force_unit: "eV/Å"
+    stress_unit: "eV/Å³"
+    temperature_range: [300, 2000]
+    atomic_species: [1, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]
+    max_samples: 500  # Limit for testing
+    weight: 1.8
+    enabled: true
+
+  ani1x:
+    domain_id: "ani1x"
+    name: "ANI1x"
+    path: "data/ani1x/ani1x_dataset.h5"
+    energy_unit: "Hartree"
+    force_unit: "Hartree/Bohr"
+    stress_unit: "Hartree/Bohr³"
+    temperature_range: [100, 2000]
+    atomic_species: [1, 6, 7, 8]  # H, C, N, O
+    max_samples: 1000  # Limit for testing
+    weight: 1.5
+    enabled: true
+
+# Training configuration
+training:
+  batch_size: 16
+  epochs: 50
+  learning_rate: 1e-4
+  w_e: 1.0
+  w_f: 100.0
+  w_s: 10.0
+  scheduler_type: "plateau"
+  early_stopping_patience: 15
+  max_grad_norm: 1.0
+
+# Model configuration
+model:
+  hidden_channels: 256
+  num_filters: 256
+  num_interactions: 8
+  num_gaussians: 64
+  cutoff: 6.0
+  max_num_neighbors: 64

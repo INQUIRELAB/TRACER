@@ -1,0 +1,132 @@
+# Domain-aware GNN training configuration
+# Includes FiLM readout and LoRA adapters for fine-tuning
+
+dataset:
+  # Dataset mixing strategy
+  mix_strategy: "temperature"  # "uniform", "temperature", "weighted"
+  temperature_tau: 2.0
+  
+  # Unit conversion
+  unit_conversion:
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+  
+  # Data splits
+  validation_split: 0.1
+  test_split: 0.1
+  random_seed: 42
+  
+  # Individual dataset configurations
+  jarvis_dft:
+    enabled: true
+    max_samples: null  # Use all samples
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+    temperature_range: [0, 3000]
+    atomic_species: ["H", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"]
+  
+  jarvis_elastic:
+    enabled: true
+    max_samples: null
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+    temperature_range: [0, 3000]
+    atomic_species: ["H", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"]
+  
+  oc20_s2ef:
+    enabled: true
+    max_samples: 1000  # Limit for testing
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+    temperature_range: [0, 3000]
+    atomic_species: ["H", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"]
+  
+  oc22_s2ef:
+    enabled: true
+    max_samples: 500
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+    temperature_range: [0, 3000]
+    atomic_species: ["H", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"]
+  
+  ani1x:
+    enabled: true
+    max_samples: 1000
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+    temperature_range: [0, 3000]
+    atomic_species: ["H", "C", "N", "O", "F"]
+
+# Domain adapter configuration
+domain_adapter:
+  # Domain embedding
+  domain_embedding_dim: 64
+  num_domains: 5  # JARVIS-DFT, JARVIS-Elastic, OC20, OC22, ANI1x
+  
+  # FiLM parameters
+  film_dim: 128
+  film_use_bias: true
+  
+  # LoRA parameters
+  lora_rank: 8
+  lora_alpha: 16.0
+  lora_dropout: 0.1
+  
+  # Fine-tuning parameters
+  fine_tune_layers: 2  # Last N interaction layers
+  fine_tune_lr: 1e-5
+  freeze_backbone: true
+
+# Training configuration
+training:
+  # Multi-task loss weights
+  w_e: 1.0    # Energy weight
+  w_f: 10.0   # Force weight (higher for ANI/OC20 datasets)
+  w_s: 0.0    # Stress weight (typically not available)
+  
+  # Training parameters
+  batch_size: 16
+  epochs: 50
+  learning_rate: 1e-4
+  weight_decay: 1e-6
+  max_grad_norm: 1.0
+  
+  # Scheduler configuration
+  scheduler_type: "reduce_on_plateau"  # "reduce_on_plateau", "cosine", "step"
+  scheduler_patience: 10
+  scheduler_factor: 0.5
+  scheduler_min_lr: 1e-7
+  
+  # Early stopping
+  early_stopping_patience: 20
+  early_stopping_min_delta: 1e-6
+  
+  # Logging configuration
+  log_every_n_steps: 100
+  save_every_n_epochs: 10
+  
+  # Multi-task specific
+  enable_per_domain_logging: true
+  missing_label_strategy: "ignore"  # "ignore", "zero", "mask"
+
+# Model configuration
+model:
+  hidden_channels: 128
+  num_filters: 128
+  num_interactions: 6
+  num_gaussians: 50
+  cutoff: 10.0
+  max_num_neighbors: 32
+  readout: "add"
+  dipole: false
+  mean: 0.0
+  std: 1.0
+  atomref: null
+
+

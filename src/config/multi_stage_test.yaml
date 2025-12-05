@@ -1,0 +1,115 @@
+# Simplified multi-stage training configuration for testing
+# Uses only JARVIS datasets to test the pipeline quickly
+
+dataset:
+  # Dataset mixing strategy
+  mix_strategy: "uniform"  # Simpler strategy for testing
+  temperature_tau: 1.0
+  
+  # Unit conversion
+  unit_conversion:
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+  
+  # Data splits
+  validation_split: 0.1
+  test_split: 0.1
+  random_seed: 42
+  
+  # Individual dataset configurations - ONLY JARVIS for testing
+  jarvis_dft:
+    enabled: true
+    max_samples: 1000  # Small sample for testing
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+    temperature_range: [0, 3000]
+    atomic_species: ["H", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"]
+  
+  jarvis_elastic:
+    enabled: true
+    max_samples: 500  # Small sample for testing
+    energy_unit: "eV"
+    force_unit: "eV/Angstrom"
+    stress_unit: "eV/Angstrom^3"
+    temperature_range: [0, 3000]
+    atomic_species: ["H", "C", "N", "O", "F", "Si", "P", "S", "Cl", "Br", "I"]
+  
+  # Disable other datasets for testing
+  oc20_s2ef:
+    enabled: false
+    max_samples: 0
+  
+  oc22_s2ef:
+    enabled: false
+    max_samples: 0
+  
+  ani1x:
+    enabled: false
+    max_samples: 0
+
+# Domain adapter configuration
+domain_adapter:
+  # Domain embedding
+  domain_embedding_dim: 32  # Smaller for testing
+  num_domains: 2  # Only JARVIS datasets
+  
+  # FiLM parameters
+  film_dim: 64  # Smaller for testing
+  film_use_bias: true
+  
+  # LoRA parameters
+  lora_rank: 4  # Smaller for testing
+  lora_alpha: 8.0
+  lora_dropout: 0.1
+  
+  # Fine-tuning parameters
+  fine_tune_layers: 2
+  fine_tune_lr: 1e-5
+  freeze_backbone: true
+
+# Training configuration
+training:
+  # Multi-task loss weights
+  w_e: 1.0    # Energy weight
+  w_f: 10.0   # Force weight
+  w_s: 0.0    # Stress weight
+  
+  # Training parameters
+  batch_size: 8  # Smaller batch for testing
+  learning_rate: 1e-4
+  weight_decay: 1e-6
+  max_grad_norm: 1.0
+  
+  # Scheduler configuration
+  scheduler_type: "reduce_on_plateau"
+  scheduler_patience: 5
+  scheduler_factor: 0.5
+  scheduler_min_lr: 1e-7
+  
+  # Early stopping
+  early_stopping_patience: 10
+  early_stopping_min_delta: 1e-6
+  
+  # Logging configuration
+  log_every_n_steps: 10
+  save_every_n_epochs: 5
+  
+  # Multi-task specific
+  enable_per_domain_logging: true
+  missing_label_strategy: "ignore"
+
+# Model configuration
+model:
+  hidden_channels: 64  # Smaller for testing
+  num_filters: 64
+  num_interactions: 3  # Fewer interactions for testing
+  num_gaussians: 25
+  cutoff: 5.0
+  max_num_neighbors: 16
+  readout: "add"
+  dipole: false
+  mean: 0.0
+  std: 1.0
+  atomref: null

@@ -1,0 +1,67 @@
+# Default configuration for DFT→GNN→QNN pipeline
+
+# Dataset configuration
+dataset:
+  name: mptrj         # one of: mptrj | oc20_s2ef | oc22 | mp_props | spice | ani | rmd17
+  root: data/
+  split: train        # train/val/test
+  batch_size: 8
+  cutoff: 6.0
+  features: distances, angles, frac_coords
+
+# OCP-specific configuration
+ocp:
+  task: s2ef          # s2ef/is2re/is2rs
+  split_size: 200k    # 200k|2M|20M|134M (OC20)
+
+# Materials Project API configuration
+mp_api:
+  use_charge_density: true
+  api_key_env: MP_API_KEY
+
+# Data configuration (legacy)
+data:
+  input_path: "data/raw"
+  output_path: "data/processed"
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+# GNN configuration
+gnn:
+  model_type: "SchNet"
+  hidden_dim: 128
+  num_layers: 4
+  learning_rate: 0.001
+  batch_size: 32
+  num_epochs: 100
+  ensemble_size: 5
+
+# Uncertainty thresholding
+uncertainty:
+  threshold: 0.1
+  method: "ensemble_variance"
+
+# DMET configuration
+dmet:
+  fragment_size: 10
+  bath_size: 5
+  convergence_threshold: 1e-6
+
+# VQE configuration
+vqe:
+  optimizer: "SPSA"
+  max_iterations: 1000
+  ansatz_depth: 3
+
+# Delta learning configuration
+delta:
+  learning_rate: 0.001
+  num_epochs: 50
+  hidden_dim: 64
+
+# Pipeline configuration
+pipeline:
+  device: "cuda"
+  num_workers: 4
+  seed: 42

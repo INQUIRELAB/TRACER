@@ -1,0 +1,2 @@
+[console_scripts]
+dft-hybrid = dft_hybrid.pipeline.run:main

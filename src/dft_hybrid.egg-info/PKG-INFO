@@ -1,0 +1,251 @@
+Metadata-Version: 2.4
+Name: dft-hybrid
+Version: 0.1.0
+Summary: Hybrid DFT→GNN→QNN pipeline for quantum chemistry
+Author-email: Your Name <your.email@example.com>
+License: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Chemistry
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: torch>=2.0.0
+Requires-Dist: mace-torch>=0.3.14
+Requires-Dist: e3nn>=0.4.0
+Requires-Dist: ase>=3.22.0
+Requires-Dist: pymatgen>=2023.12.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: scipy>=1.10.0
+Requires-Dist: hydra-core>=1.3.0
+Requires-Dist: typer[all]>=0.9.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: pytest>=7.4.0
+Requires-Dist: rich>=13.0.0
+Requires-Dist: pyscf>=2.3.0
+Requires-Dist: openfermion>=1.6.0
+Requires-Dist: pennylane>=0.32.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: mypy>=1.5.0; extra == "dev"
+Provides-Extra: wandb
+Requires-Dist: wandb>=0.16.0; extra == "wandb"
+
+# DFT→GNN→QNN Hybrid Pipeline
+
+A hybrid quantum chemistry approach combining Density Functional Theory (DFT), Graph Neural Networks (GNN), and Quantum Neural Networks (QNN) for accurate and efficient molecular property prediction.
+
+## Overview
+
+This package implements a three-stage pipeline:
+
+1. **DFT Stage**: Generate reference data using DFT calculations
+2. **GNN Stage**: Train Graph Neural Network surrogates for fast predictions
+3. **QNN Stage**: Use quantum calculations (DMET+VQE) for hard cases and learn corrections
+
+The pipeline uses ensemble uncertainty estimation to gate "hard" cases that require more accurate quantum calculations, then learns a delta correction head to improve overall accuracy.
+
+## Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd dft
+
+# Setup development environment (recommended)
+make setup
+
+# Or install manually
+pip install -e ".[dev]"
+```
+
+## Project Structure
+
+```
+dft/
+├── src/
+│   └── dft_hybrid/
+│       ├── __init__.py
+│       ├── config/
+│       │   └── config.yaml          # Default configuration
+│       ├── data/
+│       │   └── io.py                # Data loading and preprocessing
+│       ├── graphs/
+│       │   └── periodic_graph.py    # Periodic graph construction
+│       ├── gnn/
+│       │   ├── model.py             # GNN architectures
+│       │   ├── train.py             # Training utilities
+│       │   └── uncertainty.py       # Uncertainty estimation
+│       ├── dmet/
+│       │   └── fragment.py          # DMET fragment calculations
+│       ├── quantum/
+│       │   └── vqe.py               # VQE implementation
+│       ├── distill/
+│       │   └── delta_head.py        # Delta learning for corrections
+│       └── pipeline/
+│           └── run.py               # Main pipeline orchestrator
+├── tests/
+│   ├── test_graphs.py               # Graph construction tests
+│   ├── test_gnn_stub.py             # GNN model tests
+│   └── test_quantum_stub.py         # Quantum module tests
+├── scripts/
+│   ├── prep_data.py                 # Data preparation script
+│   ├── train_gnn.py                 # GNN training script
+│   ├── label_quantum.py             # Quantum labeling script
+│   └── distill_delta.py             # Delta learning script
+├── pyproject.toml                   # Package configuration
+└── README.md                        # This file
+```
+
+## Usage
+
+### Quick Start with Makefile
+
+```bash
+# Setup development environment
+make setup
+
+# Run linting and tests
+make lint
+make test
+
+# Train GNN surrogate
+make train-gnn
+
+# Run quantum labeling for hard cases
+make quantum-label
+
+# Train delta learning head
+make distill
+
+# Run full pipeline
+make pipeline
+```
+
+### Manual Usage
+
+#### 1. Data Preparation
+
+```bash
+python scripts/prep_data.py --input-path data/raw --output-path data/processed
+```
+
+#### 2. Train GNN Surrogate
+
+```bash
+python scripts/train_gnn.py --data-path data/processed --model-path models/gnn.pt --ensemble
+```
+
+#### 3. Label Hard Cases with Quantum Calculations
+
+```bash
+python scripts/label_quantum.py --hard-cases-path data/hard_cases --output-path data/quantum_labels
+```
+
+#### 4. Train Delta Correction Head
+
+```bash
+python scripts/distill_delta.py --gnn-model-path models/gnn.pt --quantum-labels-path data/quantum_labels --delta-model-path models/delta.pt
+```
+
+#### 5. Run Full Pipeline
+
+```bash
+python -m dft_hybrid.pipeline.run --input-path data/raw --output-path results/
+```
+
+## Configuration
+
+The pipeline is configured using Hydra. Default settings are in `src/config/config.yaml`:
+
+- **Data**: Input/output paths, train/val/test splits
+- **GNN**: Model architecture, training parameters, ensemble size
+- **Uncertainty**: Thresholding method and parameters
+- **DMET**: Fragment size, bath size, convergence criteria
+- **VQE**: Optimizer, iterations, ansatz depth
+- **Delta**: Learning rate, epochs, hidden dimensions
+
+## Key Features
+
+- **Hybrid Architecture**: Combines classical ML with quantum calculations
+- **Uncertainty Gating**: Automatically identifies cases requiring quantum accuracy
+- **Ensemble Methods**: Multiple GNN models for robust uncertainty estimation
+- **Periodic Systems**: Support for crystalline materials with periodic boundary conditions
+- **Modular Design**: Clean separation of concerns with pluggable components
+- **Type Safety**: Full Python typing support for better code quality
+
+## Testing
+
+Run the test suite:
+
+```bash
+pytest tests/ -v --cov=src/dft_hybrid --cov-report=html
+```
+
+## Development
+
+The project follows modern Python development practices:
+
+- **Type Hints**: All functions use Python typing
+- **Code Formatting**: Ruff for fast linting and formatting
+- **Type Checking**: mypy for static type analysis
+- **Testing**: pytest with coverage reporting
+- **Makefile**: Convenient development workflow commands
+
+## Dependencies
+
+### Core Dependencies
+- **torch**: Deep learning framework
+- **mace-torch**: Modern Atom-Centered Environments (MACE) neural network potentials
+- **e3nn**: E(3) equivariant neural networks
+- **ase**: Atomic Simulation Environment
+- **pymatgen**: Python Materials Genomics library
+- **numpy**: Numerical computing
+- **scipy**: Scientific computing
+- **hydra-core**: Configuration management
+- **typer**: CLI framework
+- **pydantic**: Data validation
+- **pytest**: Testing framework
+- **rich**: Rich text and beautiful formatting
+- **pyscf**: Python-based quantum chemistry
+- **openfermion**: Open source quantum chemistry
+- **pennylane**: Quantum machine learning
+
+### Optional Dependencies
+- **wandb**: Weights & Biases experiment tracking
+
+### Development Dependencies
+- **ruff**: Fast Python linter and formatter
+- **mypy**: Static type checker
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes with tests
+4. Run the test suite
+5. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Citation
+
+If you use this software in your research, please cite:
+
+```bibtex
+@software{dft_gnn_qnn_hybrid,
+  title={DFT→GNN→QNN Hybrid Pipeline for Quantum Chemistry},
+  author={Your Name},
+  year={2024},
+  url={https://github.com/your-username/dft-gnn-qnn}
+}
+```
