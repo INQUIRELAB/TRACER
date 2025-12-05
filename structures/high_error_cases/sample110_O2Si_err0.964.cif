@@ -1,0 +1,34 @@
+data_image0
+_chemical_formula_structural       Si3O6
+_chemical_formula_sum              "Si3 O6"
+_cell_length_a       10.921019167486826
+_cell_length_b       10.921019167486826
+_cell_length_c       10.921019167486826
+_cell_angle_alpha    90.0
+_cell_angle_beta     90.0
+_cell_angle_gamma    90.0
+
+_space_group_name_H-M_alt    "P 1"
+_space_group_IT_number       1
+
+loop_
+  _space_group_symop_operation_xyz
+  'x, y, z'
+
+loop_
+  _atom_site_type_symbol
+  _atom_site_label
+  _atom_site_symmetry_multiplicity
+  _atom_site_fract_x
+  _atom_site_fract_y
+  _atom_site_fract_z
+  _atom_site_occupancy
+  Si  Si1       1.0  0.08379757435003149  0.9999999999997674  0.0610443942800452  1.0000
+  Si  Si2       1.0  0.007768971286996539  0.007768971286996539  0.0  1.0000
+  Si  Si3       1.0  0.9999999999997674  0.08379757435003149  0.03052215135675022  1.0000
+  O   O1        1.0  0.010897691739429095  0.04235556949800795  0.08433454363181313  1.0000
+  O   O2        1.0  0.049210976138052406  0.06010866787619902  0.05381239227506355  1.0000
+  O   O3        1.0  0.04235556949800795  0.010897691739429095  0.007232002004982295  1.0000
+  O   O4        1.0  0.031457877759313906  0.08066885389938383  0.023290240918313318  1.0000
+  O   O5        1.0  0.08066885389938383  0.031457877759313906  0.06827630471848209  1.0000
+  O   O6        1.0  0.06010866787619902  0.049210976138052406  0.03775415336173188  1.0000
