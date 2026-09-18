@@ -2,7 +2,7 @@
 Computational Materials Discovery
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Noncommercial](https://img.shields.io/badge/License-Noncommercial-blue.svg)](LICENSE)
 
 A state-of-the-art materials property prediction pipeline using Graph Neural Networks (GNNs) with domain-aware adaptation and novel gate-hard ranking for identifying challenging cases. Achieves **MAE of 0.037 eV/atom** on JARVIS-DFT dataset, outperforming ALIGNN by 25.8% in MAE and 29.3% in RMSE.
 
@@ -173,7 +173,7 @@ TRACER/
 │
 ├── pyproject.toml                   # Package configuration & dependencies
 ├── Makefile                         # Development commands
-├── LICENSE                          # MIT License
+├── LICENSE                          # PolyForm Noncommercial License 1.0.0
 ├── README.md                        # This file
 ├── QUICK_START.md                   # Quick start guide
 ├── CONTRIBUTING.md                  # Contribution guidelines
@@ -314,7 +314,7 @@ python scripts/fine_tune_matbench.py \
 
 ## 📝 License
 
-MIT License - see LICENSE file for details.
+PolyForm Noncommercial License 1.0.0 - see LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
@@ -342,3 +342,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 For questions or issues, please open an issue on GitHub or contact [gourab.datta-1@ou.edu].
 
+## License scope
+
+Original INQUIRE Lab code is licensed under PolyForm Noncommercial License 1.0.0. Original INQUIRE Lab datasets, figures, and documentation are licensed under CC BY-NC 4.0. See [LICENSE](LICENSE) for scope and the full license texts. Materials from other rights holders retain their original terms.
