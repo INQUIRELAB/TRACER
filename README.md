@@ -342,6 +342,18 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 For questions or issues, please open an issue on GitHub or contact [gourab.datta-1@ou.edu].
 
+# TRACER
+
+[![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs41598--026--45279--6-0077C8.svg)](https://doi.org/10.1038/s41598-026-45279-6)
+
+TRACER: A reliability-first framework for trustworthy computational materials discovery.
+
+## Paper
+
+The TRACER paper is published in *Scientific Reports*.
+
+**DOI:** [10.1038/s41598-026-45279-6](https://doi.org/10.1038/s41598-026-45279-6)
+
 ## License scope
 
 Original INQUIRE Lab code is licensed under PolyForm Noncommercial License 1.0.0. Original INQUIRE Lab datasets, figures, and documentation are licensed under CC BY-NC 4.0. See [LICENSE](LICENSE) for scope and the full license texts. Materials from other rights holders retain their original terms.
